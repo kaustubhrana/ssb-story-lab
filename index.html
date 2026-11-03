@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#454b20">
+  <meta name="description" content="The SSB Story Lab by Capt. Kaustubh Rana (Retd.) — personalised PPDT and TAT practice, evaluation and feedback.">
+  <title>THE SSB STORY LAB | Capt. Kaustubh Rana (Retd.)</title>
+  <style>
+    :root {
+      --olive:#454b20; --olive-dark:#303516; --olive-soft:#eef0e4;
+      --paper:#f7f6ef; --ink:#202218; --muted:#686b5d; --line:#d9dacd;
+      --yellow:#f2df16; --white:#fff; --shadow:0 12px 35px rgba(35,39,18,.09);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
+    a{color:inherit}
+    .topbar{background:linear-gradient(110deg,var(--olive-dark),var(--olive));color:#fff;padding:14px 20px}
+    .topbar-inner{max-width:1080px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .brand-mini{font-size:.76rem;letter-spacing:.17em;font-weight:800}
+    .top-link{font-size:.85rem;text-decoration:none;border:1px solid #ffffff55;padding:8px 12px;border-radius:999px}
+    .hero{background:var(--olive);color:#fff;padding:54px 20px 58px;position:relative;overflow:hidden}
+    .hero:after{content:"";position:absolute;width:390px;height:390px;border:1px solid #ffffff18;border-radius:50%;right:-125px;top:-190px;box-shadow:0 0 0 35px #ffffff08,0 0 0 75px #ffffff06}
+    .wrap{max-width:1080px;margin:auto;position:relative;z-index:1}
+    .eyebrow{color:var(--yellow);font-size:.76rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase}
+    h1{font-size:clamp(2.5rem,7vw,5.2rem);line-height:.98;letter-spacing:-.055em;margin:14px 0 12px;font-weight:900}
+    h1 span{color:var(--yellow)}
+    .hero-sub{font-size:clamp(1rem,2.3vw,1.3rem);max-width:650px;color:#f0f0e7;margin:0}
+    .hero-meta{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+    .pill{border:1px solid #ffffff55;border-radius:999px;padding:7px 12px;font-size:.82rem;color:#f8f8ef}
+    .mentor{margin-top:28px;font-size:.9rem;color:#e2e4d3}
+    main{max-width:1080px;margin:auto;padding:34px 20px 70px}
+    .intro{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:start;margin-bottom:32px}
+    .intro h2,.section-title{font-size:1.55rem;letter-spacing:-.03em;margin:0 0 9px}
+    .intro p{color:var(--muted);margin:0}
+    .note{background:#fff;border:1px solid var(--line);border-left:4px solid var(--yellow);padding:16px 18px;border-radius:12px;box-shadow:var(--shadow);font-size:.9rem}
+    .note strong{display:block;margin-bottom:4px}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:34px 0 16px}
+    .section-head p{color:var(--muted);font-size:.9rem;margin:0}
+    .catalog{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;min-height:260px;transition:.18s ease}
+    .card.selected{border:2px solid var(--olive);padding:19px;background:#fcfcf7}
+    .card-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .tag{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--olive);background:var(--olive-soft);border-radius:999px;padding:6px 9px}
+    .card h3{font-size:1.35rem;margin:15px 0 6px;letter-spacing:-.03em}
+    .card p{font-size:.9rem;color:var(--muted);margin:0 0 16px}
+    .starting{margin-top:auto;font-size:.78rem;color:var(--muted)}
+    .price{font-size:1.7rem;font-weight:850;letter-spacing:-.04em;color:var(--olive-dark)}
+    .select-btn,.primary-btn{border:0;background:var(--olive);color:#fff;border-radius:10px;padding:12px 15px;font-weight:750;font-size:.92rem;cursor:pointer}
+    .select-btn{margin-top:12px;width:100%}
+    .select-btn:hover,.primary-btn:hover{background:var(--olive-dark)}
+    .builder{margin-top:34px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
+    .builder-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+    .field{margin-top:17px}
+    label{display:block;font-size:.83rem;font-weight:750;margin-bottom:7px}
+    select,input{width:100%;border:1px solid #cfd1c3;border-radius:10px;padding:12px;background:#fff;color:var(--ink);font:inherit}
+    select:focus,input:focus{outline:3px solid #454b2022;border-color:var(--olive)}
+    .summary{background:var(--olive-soft);border-radius:14px;padding:20px;display:flex;flex-direction:column;justify-content:space-between}
+    .summary-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:800}
+    .summary-name{font-size:1.15rem;font-weight:800;margin:6px 0}
+    .summary-price{font-size:2.5rem;font-weight:900;letter-spacing:-.06em;color:var(--olive-dark);margin:8px 0}
+    .summary small{color:var(--muted)}
+    .payment-help{font-size:.82rem;color:var(--muted);margin-top:12px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .full{grid-column:1/-1}
+    .disclaimer{font-size:.78rem;color:var(--muted);margin-top:18px;line-height:1.55}
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:15px}
+    .step{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+    .step b{display:block;color:var(--olive);font-size:.76rem;letter-spacing:.08em;margin-bottom:5px}
+    .step span{font-size:.86rem;color:var(--muted)}
+    footer{background:var(--olive-dark);color:#fff;padding:26px 20px}
+    .footer-inner{max-width:1080px;margin:auto;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+    footer small{color:#d9ddc9}
+    .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#202218;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow);display:none;z-index:10;max-width:calc(100% - 30px);font-size:.9rem}
+    @media(max-width:760px){.intro,.builder-grid{grid-template-columns:1fr}.catalog{grid-template-columns:1fr}.card{min-height:0}.steps{grid-template-columns:1fr 1fr}.hero{padding:42px 20px}.section-head{display:block}.section-head p{margin-top:5px}}
+    @media(max-width:430px){.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.steps{grid-template-columns:1fr}.builder{padding:18px}}
+  </style>
+</head>
+<body>
+  <div class="topbar"><div class="topbar-inner">
+    <div class="brand-mini">THE SSB STORY LAB</div>
+    <a class="top-link" href="#catalogue">Explore programmes ↓</a>
+  </div></div>
+
+  <header class="hero">
+    <div class="wrap">
+      <div class="eyebrow">An independent SSB mentorship initiative</div>
+      <h1>THE SSB<br><span>STORY LAB</span></h1>
+      <p class="hero-sub">Realistic practice. Personal evaluation. Meaningful improvement.</p>
+      <div class="hero-meta">
+        <span class="pill">PPDT</span><span class="pill">Full TAT</span><span class="pill">Individual feedback</span>
+      </div>
+      <div class="mentor">By <strong>Capt. Kaustubh Rana (Retd.)</strong> · Indian Army Veteran</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div>
+        <h2>Practice with purpose.</h2>
+        <p>Choose a PPDT or TAT exercise, attempt it under the stated time conditions, and receive individualised feedback on your written responses. Select the level of support that suits your preparation.</p>
+      </div>
+      <aside class="note"><strong>How enrolment works</strong>Select a programme and service level, enter your details, then proceed to UPI payment. Your enrolment is confirmed only after payment is independently verified.</aside>
+    </section>
+
+    <section id="catalogue">
+      <div class="section-head">
+        <div><div class="eyebrow" style="color:var(--olive)">Programme catalogue</div><h2 class="section-title">Choose your assessment</h2></div>
+        <p>Introductory prices · INR</p>
+      </div>
+      <div class="catalog">
+        <article class="card" data-program="ppdt">
+          <div class="card-top"><span class="tag">Stage I practice</span><span>01</span></div>
+          <h3>PPDT Assessment</h3>
+          <p>Picture perception and story-writing practice, with individual evaluation and feedback.</p>
+          <div class="starting">Starting at</div><div class="price">₹199</div>
+          <button class="select-btn" data-select="ppdt">Select PPDT</button>
+        </article>
+        <article class="card" data-program="tat">
+          <div class="card-top"><span class="tag">Psychology practice</span><span>02</span></div>
+          <h3>Full TAT Assessment</h3>
+          <p>A full TAT practice exercise, followed by story-wise observations and developmental feedback.</p>
+          <div class="starting">Starting at</div><div class="price">₹499</div>
+          <button class="select-btn" data-select="tat">Select TAT</button>
+        </article>
+        <article class="card" data-program="combo">
+          <div class="card-top"><span class="tag">Combined programme</span><span>03</span></div>
+          <h3>PPDT + TAT Combo</h3>
+          <p>Combine both exercises for a broader review of your story-writing approach.</p>
+          <div class="starting">Starting at</div><div class="price">₹699</div>
+          <button class="select-btn" data-select="combo">Select Combo</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="builder" id="enrol">
+      <div class="eyebrow" style="color:var(--olive)">Build your enrolment</div>
+      <h2 class="section-title">Select your service level</h2>
+      <div class="builder-grid">
+        <div>
+          <div class="field">
+            <label for="program">Programme</label>
+            <select id="program">
+              <option value="ppdt">PPDT Assessment</option>
+              <option value="tat">Full TAT Assessment</option>
+              <option value="combo">PPDT + TAT Combo</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="service">Service level</label>
+            <select id="service">
+              <option value="written">Written Story Evaluation</option>
+              <option value="simulation">Live Simulation + Evaluation & Feedback</option>
+              <option value="consultation">Live Simulation + Evaluation + Feedback + 30-minute 1:1</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="candidate">Candidate name</label>
+            <input id="candidate" autocomplete="name" placeholder="Your full name">
+          </div>
+          <div class="field">
+            <label for="whatsapp">WhatsApp number</label>
+            <input id="whatsapp" inputmode="tel" autocomplete="tel" placeholder="10-digit mobile number">
+          </div>
+          <div class="field">
+            <label for="email">Email address (optional)</label>
+            <input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+          </div>
+          <div class="field">
+            <label for="attempt">SSB preparation stage</label>
+            <select id="attempt">
+              <option>First-time candidate</option>
+              <option>Repeat candidate</option>
+              <option>Previously screened out</option>
+              <option>Previously conference out</option>
+              <option>Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+        <aside class="summary">
+          <div>
+            <div class="summary-label">Your selection</div>
+            <div class="summary-name" id="summaryName">PPDT Assessment</div>
+            <div id="summaryService">Written Story Evaluation</div>
+            <div class="summary-price" id="summaryPrice">₹199</div>
+            <small id="summaryNote">One-time programme fee</small>
+          </div>
+          <div>
+            <button class="primary-btn" id="payBtn" style="width:100%;margin-top:20px">Continue to UPI payment</button>
+            <div class="payment-help">Payment opens your UPI app with the selected amount pre-filled. Please verify the payee name before authorising payment.</div>
+          </div>
+        </aside>
+      </div>
+      <p class="disclaimer">By continuing, you agree that your details and submitted responses may be used to administer this assessment and provide feedback. Your responses will not be used publicly without separate permission. Do not submit sensitive personal information.</p>
+    </section>
+
+    <section style="margin-top:38px">
+      <h2 class="section-title">What happens next?</h2>
+      <div class="steps">
+        <div class="step"><b>01 · SELECT</b><span>Choose the programme and service level.</span></div>
+        <div class="step"><b>02 · REGISTER</b><span>Enter your contact details and preparation stage.</span></div>
+        <div class="step"><b>03 · PAY</b><span>Complete payment using your UPI app.</span></div>
+        <div class="step"><b>04 · BEGIN</b><span>Receive confirmation and exercise instructions after payment verification.</span></div>
+      </div>
+    </section>
+
+    <p class="disclaimer"><strong>Important:</strong> The SSB Story Lab is an independent mentoring and developmental assessment initiative. It is not affiliated with, endorsed by or conducted on behalf of the Services Selection Board, DIPR or the Armed Forces. Exercises are practice activities, not official psychological tests. Feedback is not an official psychological evaluation, a prediction of selection or a guarantee of recommendation. Programme-specific inclusions and timings will be shared before the exercise begins.</p>
+  </main>
+
+  <footer><div class="footer-inner">
+    <div><strong>THE SSB STORY LAB</strong><br><small>Write. Reflect. Improve.</small></div>
+    <div><strong>Capt. Kaustubh Rana (Retd.)</strong><br><small>Independent SSB mentorship initiative</small></div>
+  </div></footer>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    // SETUP REQUIRED: Replace this with your own UPI ID before publishing.
+    // Example format: yourname@bank
+    const UPI_ID = "YOUR_UPI_ID_HERE";
+    const PAYEE_NAME = "Capt Kaustubh Rana";
+
+    const prices = {
+      ppdt: { written:199, simulation:499, consultation:999 },
+      tat: { written:499, simulation:1099, consultation:2199 },
+      combo: { written:699, simulation:2199, consultation:2999 }
+    };
+    const programNames = {
+      ppdt:"PPDT Assessment",
+      tat:"Full TAT Assessment",
+      combo:"PPDT + TAT Combo"
+    };
+    const serviceNames = {
+      written:"Written Story Evaluation",
+      simulation:"Live Simulation + Evaluation & Feedback",
+      consultation:"Live Simulation + Evaluation + Feedback + 30-minute 1:1"
+    };
+    const program = document.getElementById("program");
+    const service = document.getElementById("service");
+    const summaryName = document.getElementById("summaryName");
+    const summaryService = document.getElementById("summaryService");
+    const summaryPrice = document.getElementById("summaryPrice");
+    const toast = document.getElementById("toast");
+
+    function amount(){ return prices[program.value][service.value]; }
+    function refresh(){
+      summaryName.textContent = programNames[program.value];
+      summaryService.textContent = serviceNames[service.value];
+      summaryPrice.textContent = "₹" + amount().toLocaleString("en-IN");
+      document.querySelectorAll(".card").forEach(card => card.classList.toggle("selected", card.dataset.program === program.value));
+    }
+    function notify(message){
+      toast.textContent = message; toast.style.display = "block";
+      window.setTimeout(() => toast.style.display = "none", 4200);
+    }
+    program.addEventListener("change", refresh);
+    service.addEventListener("change", refresh);
+    document.querySelectorAll("[data-select]").forEach(button => {
+      button.addEventListener("click", () => {
+        program.value = button.dataset.select;
+        refresh();
+        document.getElementById("enrol").scrollIntoView({behavior:"smooth"});
+      });
+    });
+    document.getElementById("payBtn").addEventListener("click", () => {
+      const name = document.getElementById("candidate").value.trim();
+      const phone = document.getElementById("whatsapp").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const attempt = document.getElementById("attempt").value;
+      if(!name || !phone){ notify("Please enter your name and WhatsApp number first."); return; }
+      if(!/^[0-9+\-\s]{10,15}$/.test(phone)){ notify("Please enter a valid contact number."); return; }
+      if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ notify("Please enter a valid email address."); return; }
+      if(UPI_ID === "YOUR_UPI_ID_HERE" || !UPI_ID.includes("@")){
+        notify("The payment setup is not active yet. Please contact the programme administrator.");
+        return;
+      }
+      const reference = "SSBL" + Date.now().toString().slice(-10);
+      const note = `${programNames[program.value]} - ${serviceNames[service.value]}`;
+      const params = new URLSearchParams({
+        pa:UPI_ID, pn:PAYEE_NAME, am:amount().toFixed(2), cu:"INR",
+        tn:note, tr:reference
+      });
+      const upiUrl = "upi://pay?" + params.toString();
+      const details = [
+        "SSB STORY LAB ENROLMENT",
+        "Reference: " + reference,
+        "Name: " + name,
+        "WhatsApp: " + phone,
+        "Email: " + (email || "Not provided"),
+        "Preparation stage: " + attempt,
+        "Programme: " + programNames[program.value],
+        "Service: " + serviceNames[service.value],
+        "Amount: INR " + amount()
+      ].join("\n");
+      try { localStorage.setItem("ssbl_last_enquiry", details); } catch(e) {}
+      window.location.href = upiUrl;
+      notify("UPI app should open. After payment, follow the confirmation instructions shared by the administrator.");
+    });
+    refresh();
+  </script>
+</body>
+</html>
