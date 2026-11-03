@@ -62,6 +62,17 @@
     .summary-price{font-size:2.5rem;font-weight:900;letter-spacing:-.06em;color:var(--olive-dark);margin:8px 0}
     .summary small{color:var(--muted)}
     .payment-help{font-size:.82rem;color:var(--muted);margin-top:12px}
+    .payment-chooser{display:none;margin-top:24px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow)}
+    .payment-chooser.visible{display:block}
+    .payment-chooser h2{margin:0 0 5px;font-size:1.35rem}
+    .payment-amount{font-size:2rem;font-weight:900;color:var(--olive-dark);margin:8px 0}
+    .payment-apps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+    .app-btn{border:1px solid var(--line);background:#fff;border-radius:12px;padding:14px 10px;min-height:78px;font:inherit;font-weight:800;color:var(--ink);cursor:pointer}
+    .app-btn:hover{border-color:var(--olive);background:var(--olive-soft)}
+    .app-btn.generic{background:var(--olive);color:#fff;border-color:var(--olive)}
+    .app-btn small{display:block;font-size:.72rem;font-weight:500;margin-top:3px;opacity:.8}
+    .payment-reference{font-size:.85rem;color:var(--muted);overflow-wrap:anywhere}
+    .payment-fallback{font-size:.84rem;color:var(--muted);margin-top:14px;line-height:1.55}
     .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .full{grid-column:1/-1}
     .disclaimer{font-size:.78rem;color:var(--muted);margin-top:18px;line-height:1.55}
@@ -74,7 +85,8 @@
     footer small{color:#d9ddc9}
     .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#202218;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow);display:none;z-index:10;max-width:calc(100% - 30px);font-size:.9rem}
     @media(max-width:760px){.intro,.builder-grid{grid-template-columns:1fr}.catalog{grid-template-columns:1fr}.card{min-height:0}.steps{grid-template-columns:1fr 1fr}.hero{padding:42px 20px}.section-head{display:block}.section-head p{margin-top:5px}}
-    @media(max-width:430px){.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.steps{grid-template-columns:1fr}.builder{padding:18px}}
+    @media(max-width:600px){.payment-apps{grid-template-columns:1fr 1fr}}
+    @media(max-width:430px){.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.steps{grid-template-columns:1fr}.builder{padding:18px}.payment-chooser{padding:18px}}
   </style>
 </head>
 <body>
@@ -104,11 +116,11 @@
     <section id="catalogue">
       <div class="section-head">
         <div><div class="eyebrow" style="color:var(--olive)">Programme catalogue</div><h2 class="section-title">Choose your assessment</h2></div>
-        <p>Introductory prices · INR (₹)</p>
+        <p>Introductory prices · INR</p>
       </div>
       <div class="catalog">
         <article class="card" data-program="ppdt">
-          <div class="card-top"><span class="tag">Stage-I practice</span><span>01</span></div>
+          <div class="card-top"><span class="tag">Stage I practice</span><span>01</span></div>
           <h3>PPDT Assessment</h3>
           <p>Picture perception and story-writing practice, with individual evaluation and feedback.</p>
           <div class="starting">Starting at</div><div class="price">₹199</div>
@@ -117,14 +129,14 @@
         <article class="card" data-program="tat">
           <div class="card-top"><span class="tag">Psychology practice</span><span>02</span></div>
           <h3>Full TAT Assessment</h3>
-          <p>Full practice of 11+1 stories, followed by story-wise observations and developmental feedback.</p>
+          <p>A full TAT practice exercise, followed by story-wise observations and developmental feedback.</p>
           <div class="starting">Starting at</div><div class="price">₹499</div>
           <button class="select-btn" data-select="tat">Select TAT</button>
         </article>
         <article class="card" data-program="combo">
           <div class="card-top"><span class="tag">Combined programme</span><span>03</span></div>
           <h3>PPDT + TAT Combo</h3>
-          <p>Combine both exercises for a complete review of your story-writing approach.</p>
+          <p>Combine both exercises for a broader review of your story-writing approach.</p>
           <div class="starting">Starting at</div><div class="price">₹699</div>
           <button class="select-btn" data-select="combo">Select Combo</button>
         </article>
@@ -149,7 +161,7 @@
             <select id="service">
               <option value="written">Written Story Evaluation</option>
               <option value="simulation">Live Simulation + Evaluation & Feedback</option>
-              <option value="consultation">Live Simulation + Evaluation + Feedback + 30-minute 1:1</option>
+              <option value="consultation">Live Simulation + Evaluation + Feedback + 30-minute 1:1 Video Call</option>
             </select>
           </div>
           <div class="field">
@@ -168,6 +180,7 @@
             <label for="attempt">SSB preparation stage</label>
             <select id="attempt">
               <option>First-time candidate</option>
+              <option>Repeat candidate</option>
               <option>Previously screened out</option>
               <option>Previously conference out</option>
               <option>Prefer not to say</option>
@@ -191,6 +204,21 @@
       <p class="disclaimer">By continuing, you agree that your details and submitted responses may be used to administer this assessment and provide feedback. Your responses will not be used publicly without separate permission. Do not submit sensitive personal information.</p>
     </section>
 
+    <section class="payment-chooser" id="paymentChooser" aria-live="polite">
+      <div class="eyebrow" style="color:var(--olive)">Registration submitted</div>
+      <h2>Choose your UPI payment app</h2>
+      <p class="payment-reference" id="paymentRegistration"></p>
+      <div class="payment-amount" id="paymentAmount"></div>
+      <div class="payment-apps">
+        <button class="app-btn" type="button" data-upi-app="gpay">Google Pay<small>Open app</small></button>
+        <button class="app-btn" type="button" data-upi-app="phonepe">PhonePe<small>Open app</small></button>
+        <button class="app-btn" type="button" data-upi-app="paytm">Paytm<small>Open app</small></button>
+        <button class="app-btn" type="button" data-upi-app="bhim">BHIM<small>Open app</small></button>
+        <button class="app-btn generic" type="button" data-upi-app="generic" style="grid-column:1/-1">Other UPI app / Show available apps<small>Use your phone's UPI app chooser</small></button>
+      </div>
+      <p class="payment-fallback">If an app does not open, it may not be installed or configured for UPI on this device. Return here and choose another app, or use the generic UPI option. Always verify the payee name and amount before approving payment. If you are viewing this page on a computer, use the generic option on a UPI-capable device or contact us for an alternative payment method.</p>
+    </section>
+
     <section style="margin-top:38px">
       <h2 class="section-title">What happens next?</h2>
       <div class="steps">
@@ -201,12 +229,12 @@
       </div>
     </section>
 
-    <p class="disclaimer"><strong>IMPORTANT:</strong> The SSB Story Lab is an independent mentoring and developmental assessment initiative. It is not affiliated with, endorsed by or conducted on behalf of the Services Selection Board, DIPR or the Armed Forces. Exercises are practice activities, not official psychological tests. Feedback is not an official psychological evaluation, a prediction of selection or a guarantee of recommendation. Programme-specific inclusions and timings will be shared before the exercise begins.</p>
+    <p class="disclaimer"><strong>DISCLAIMER:</strong> The SSB Story Lab is an independent mentoring and developmental assessment initiative. It is not affiliated with, endorsed by or conducted on behalf of the Services Selection Board, DIPR or the Armed Forces. Exercises are practice activities, not official psychological tests. Feedback is not an official psychological evaluation, a prediction of selection or a guarantee of recommendation. Programme-specific inclusions and timings will be shared before the exercise begins.</p>
   </main>
 
   <footer><div class="footer-inner">
-    <div><strong>THE SSB STORY LAB</strong><br><small>Simulated Practice & Evaluation</small></div>
-    <div><strong>Capt. Kaustubh Rana (Retd.)</strong><br><small>Independent SSB mentorship initiative</small></div>
+    <div><strong>THE SSB STORY LAB</strong><br><small>An Independent SSB mentorship initiative</small></div>
+    <div><strong>Capt. Kaustubh Rana (Retd.)</strong><br><small>Army Veteran | Mentor </small></div>
   </div></footer>
   <div class="toast" id="toast" role="status"></div>
 
@@ -259,6 +287,44 @@
       });
     });
     const payButton = document.getElementById("payBtn");
+    const paymentChooser = document.getElementById("paymentChooser");
+    const paymentRegistration = document.getElementById("paymentRegistration");
+    const paymentAmount = document.getElementById("paymentAmount");
+    let currentUpiParams = null;
+
+    function makeUpiQuery(registrationId, selectedAmount) {
+      const note = `SSB Story Lab ${programNames[program.value]} ${registrationId}`;
+      return new URLSearchParams({
+        pa: UPI_ID,
+        pn: PAYEE_NAME,
+        am: selectedAmount.toFixed(2),
+        cu: "INR",
+        tn: note,
+        tr: registrationId
+      });
+    }
+
+    function launchUpiApp(app) {
+      if (!currentUpiParams) return;
+      const query = currentUpiParams.toString();
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const isAndroid = /Android/i.test(navigator.userAgent);
+      const links = {
+        gpay: isIOS ? `gpay://upi/pay?${query}` : `intent://pay?${query}#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end`,
+        phonepe: isIOS ? `phonepe://upi/pay?${query}` : `intent://pay?${query}#Intent;scheme=upi;package=com.phonepe.app;end`,
+        paytm: isIOS ? `paytm://upi/pay?${query}` : `intent://pay?${query}#Intent;scheme=upi;package=net.one97.paytm;end`,
+        bhim: isIOS ? `bhim://upi/pay?${query}` : `intent://pay?${query}#Intent;scheme=upi;package=in.org.npci.upiapp;end`,
+        generic: `upi://pay?${query}`
+      };
+      const target = links[app] || links.generic;
+      // Custom-scheme / Android package intents ask the OS to open the selected app.
+      // If it is unavailable, the user can return and choose another app or Generic UPI.
+      window.location.href = target;
+    }
+
+    document.querySelectorAll("[data-upi-app]").forEach(button => {
+      button.addEventListener("click", () => launchUpiApp(button.dataset.upiApp));
+    });
 
     payButton.addEventListener("click", async () => {
       const name = document.getElementById("candidate").value.trim();
@@ -289,8 +355,8 @@
       payButton.textContent = "Registering…";
 
       try {
-        // Apps Script ContentService redirects its response. no-cors allows
-        // this simple form-encoded POST, but the browser cannot read the result.
+        // Apps Script ContentService redirects its response. no-cors permits this
+        // form-encoded POST, but the browser cannot inspect the response body.
         await fetch(REGISTRATION_ENDPOINT, {
           method: "POST",
           mode: "no-cors",
@@ -311,25 +377,13 @@
           }));
         } catch(storageError) {}
 
-        // Carry the same registration reference into the UPI intent.
-        const note = `SSB Story Lab ${programNames[program.value]} ${registrationId}`;
-        const params = new URLSearchParams({
-          pa: UPI_ID,
-          pn: PAYEE_NAME,
-          am: selectedAmount.toFixed(2),
-          cu: "INR",
-          tn: note,
-          tr: registrationId
-        });
-
-        // Give the Apps Script request time to complete before handing off
-        // to the UPI app. The opaque response cannot prove the row was saved.
-        payButton.textContent = "Opening payment…";
-        notify(`Registration submitted. Keep this reference: ${registrationId}`);
-        window.setTimeout(() => {
-          window.location.href = "upi://pay?" + params.toString();
-        }, 900);
-
+        currentUpiParams = makeUpiQuery(registrationId, selectedAmount);
+        paymentRegistration.textContent = `Registration reference: ${registrationId}`;
+        paymentAmount.textContent = "₹" + selectedAmount.toLocaleString("en-IN");
+        paymentChooser.classList.add("visible");
+        paymentChooser.scrollIntoView({behavior:"smooth", block:"start"});
+        payButton.textContent = "Registration submitted";
+        notify(`Registration submitted. Reference: ${registrationId}. Now choose your UPI app.`);
       } catch(error) {
         payButton.disabled = false;
         payButton.textContent = "Continue to UPI payment";
