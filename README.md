@@ -1,38 +1,32 @@
-# THE SSB STORY LAB — GitHub Pages site
+# THE SSB STORY LAB — website update
 
 ## Files
-- `index.html` — mobile-first programme catalogue and enrolment page.
+- `index.html` — updated page based on the currently deployed file supplied on 3 Nov 2026.
+- `kaus-uniform-watermark.png` — transparent watermark asset generated from the supplied uniform image.
+- `Code.gs` — Apps Script backend update for required/unique email and registration acknowledgement email.
 
-## Before publishing
-1. Open `index.html` in a text editor.
-2. Find `const UPI_ID = "YOUR_UPI_ID_HERE";`
-3. Replace the placeholder with your actual UPI ID (example format: `name@bank`).
-4. Check `PAYEE_NAME` and change it to the exact payee name shown in your UPI app.
-5. Save the file.
+## Important backend setup
+1. Open the Apps Script project currently connected to the live Google Sheet.
+2. Replace its code with `Code.gs`.
+3. Keep this Apps Script bound to the existing master enrolment spreadsheet. The code uses `SpreadsheetApp.getActiveSpreadsheet()` and the tab name `Registrations`; no spreadsheet ID needs to be copied.
+4. Confirm row 1 columns A:N match the header order documented at the top of `Code.gs`. Do not add/reorder columns for this version.
+5. Save, then Deploy → Manage deployments → Edit the existing Web App deployment → select **New version** → Deploy. Keep **Execute as: Me** and **Who has access: Anyone**. The existing `/exec` URL should remain the same when editing the deployment.
+6. Authorise the new email permission if Google prompts. You can run `testRegistrationEmail` once after replacing `YOUR_EMAIL_ADDRESS_HERE` with your own address, then restore the placeholder if desired.
+7. Test the endpoint by opening the `/exec` URL; it should return `ONLINE`.
 
-The current prices match the poster:
-- PPDT: ₹199 / ₹499 / ₹999
-- TAT: ₹499 / ₹1,099 / ₹2,199
-- PPDT + TAT: ₹699 / ₹2,199 / ₹2,999
+## Website deployment
+1. Upload `index.html` and `kaus-uniform-watermark.png` together to the root of the existing GitHub Pages repository.
+2. Commit the two files. Do not rename the image asset unless you also update its filename in `index.html`.
 
-## Publish with GitHub Pages
-1. Sign in to GitHub and create a new repository, for example `ssb-story-lab`.
-2. Choose **Public** (simplest for GitHub Pages on a free personal account).
-3. Add/upload `index.html` to the repository root (not inside another folder).
-4. Open the repository's **Settings** → **Pages**.
-5. Under **Build and deployment**, choose **Deploy from a branch**.
-6. Select branch **main** and folder **/(root)**, then click **Save**.
-7. Wait for the Pages deployment to finish. The URL will usually look like:
-   `https://YOUR-USERNAME.github.io/ssb-story-lab/`
-8. Open that URL on your phone and test all programme/service combinations.
-9. Generate the QR code only after the final URL is live. Test the printed/displayed QR from another phone.
+## Test checklist
+- Submit a new test email: it should appear in column E and receive the acknowledgement email.
+- Try the same email again: the page should reject it before creating a second registration.
+- Try a blank or malformed email: the inline message should appear and no registration/payment should start.
+- Complete a test registration and scan the QR: confirm it shows the correct payee, amount, and registration reference before authorising payment.
+- Verify payment independently in the bank/UPI account. The sheet remains `PENDING` until you manually verify payment; this script does not automatically verify UPI transactions.
 
-## Important payment limitation
-This first version creates a UPI payment intent (`upi://pay`) with the selected amount prefilled. It does **not** verify payment, issue receipts, store enrolments in a secure database, or notify you automatically. Confirm every payment independently in your UPI app/bank account before marking a candidate as enrolled. Do not rely on a screenshot or the browser returning to the page as proof of payment.
-
-The form currently validates and uses the entered details in the browser but does not send them to you. Until a backend or form service is connected, ask candidates to message you their reference and details after payment, or add a separate registration form link.
-
-For Razorpay later, use a backend/serverless function to create orders and verify signatures/webhooks. Never put Razorpay secret keys in this public HTML file.
-
-## Updating the page
-Edit `index.html`, commit the changes to the `main` branch, and GitHub Pages will redeploy the site.
+## Notes
+- The QR is generated in the browser using QRCode.js loaded from cdnjs; it contains the dynamic UPI URI for that registration.
+- The email availability check is a JSONP read-only check. The backend also checks for duplicate email under a script lock immediately before appending, so the backend remains authoritative.
+- The existing frontend uses `fetch(..., mode: "no-cors")` for Apps Script POSTs. The browser cannot inspect the POST response. As before, the page proceeds after the request is sent; the backend is responsible for rejecting any race-condition duplicate.
+- Email delivery failure does not delete or cancel a successfully saved registration.
