@@ -87,7 +87,7 @@
     <div class="wrap">
       <div class="eyebrow">An independent SSB mentorship initiative</div>
       <h1>THE SSB<br><span>STORY LAB</span></h1>
-      <p class="hero-sub">Take Simulated Mock Tests and get your PPDT/TAT Stories personally Evaluated.</p>
+      <p class="hero-sub">Personalised PPDT and TAT practice, evaluation and feedback.</p>
       <div class="mentor">By <strong>Capt. Kaustubh Rana (Retd.)</strong> · Indian Army Veteran</div>
     </div>
   </header>
@@ -108,7 +108,7 @@
       </div>
       <div class="catalog">
         <article class="card" data-program="ppdt">
-          <div class="card-top"><span class="tag">Stage I practice</span><span>01</span></div>
+          <div class="card-top"><span class="tag">Stage-I practice</span><span>01</span></div>
           <h3>PPDT Assessment</h3>
           <p>Picture perception and story-writing practice, with individual evaluation and feedback.</p>
           <div class="starting">Starting at</div><div class="price">₹199</div>
@@ -117,14 +117,14 @@
         <article class="card" data-program="tat">
           <div class="card-top"><span class="tag">Psychology practice</span><span>02</span></div>
           <h3>Full TAT Assessment</h3>
-          <p>A full TAT practice exercise, followed by story-wise observations and developmental feedback.</p>
+          <p>Full practice of 11+1 stories, followed by story-wise observations and developmental feedback.</p>
           <div class="starting">Starting at</div><div class="price">₹499</div>
           <button class="select-btn" data-select="tat">Select TAT</button>
         </article>
         <article class="card" data-program="combo">
           <div class="card-top"><span class="tag">Combined programme</span><span>03</span></div>
           <h3>PPDT + TAT Combo</h3>
-          <p>Combine both exercises for a broader review of your story-writing approach.</p>
+          <p>Combine both exercises for a complete review of your story-writing approach.</p>
           <div class="starting">Starting at</div><div class="price">₹699</div>
           <button class="select-btn" data-select="combo">Select Combo</button>
         </article>
@@ -168,7 +168,6 @@
             <label for="attempt">SSB preparation stage</label>
             <select id="attempt">
               <option>First-time candidate</option>
-              <option>Repeat candidate</option>
               <option>Previously screened out</option>
               <option>Previously conference out</option>
               <option>Prefer not to say</option>
@@ -198,24 +197,24 @@
         <div class="step"><b>01 · SELECT</b><span>Choose the programme and service level.</span></div>
         <div class="step"><b>02 · REGISTER</b><span>Enter your contact details and preparation stage.</span></div>
         <div class="step"><b>03 · PAY</b><span>Complete payment using your UPI app.</span></div>
-        <div class="step"><b>04 · BEGIN</b><span>Receive confirmation and exercise instructions after payment verification.</span></div>
+        <div class="step"><b>04 · BEGIN</b><span>Receive confirmation and exercise instructions AFTER payment verification.</span></div>
       </div>
     </section>
 
-    <p class="disclaimer"><strong>Important:</strong> The SSB Story Lab is an independent mentoring and developmental assessment initiative. It is not affiliated with, endorsed by or conducted on behalf of the Services Selection Board, DIPR or the Armed Forces. Exercises are practice activities, not official psychological tests. Feedback is not an official psychological evaluation, a prediction of selection or a guarantee of recommendation. Programme-specific inclusions and timings will be shared before the exercise begins.</p>
+    <p class="disclaimer"><strong>IMPORTANT:</strong> The SSB Story Lab is an independent mentoring and developmental assessment initiative. It is not affiliated with, endorsed by or conducted on behalf of the Services Selection Board, DIPR or the Armed Forces. Exercises are practice activities, not official psychological tests. Feedback is not an official psychological evaluation, a prediction of selection or a guarantee of recommendation. Programme-specific inclusions and timings will be shared before the exercise begins.</p>
   </main>
 
   <footer><div class="footer-inner">
-    <div><strong>THE SSB STORY LAB</strong><br><small>Practice Tests & Personalised Evaluation.</small></div>
+    <div><strong>THE SSB STORY LAB</strong><br><small>Simulated Practice & Evaluation</small></div>
     <div><strong>Capt. Kaustubh Rana (Retd.)</strong><br><small>Independent SSB mentorship initiative</small></div>
   </div></footer>
   <div class="toast" id="toast" role="status"></div>
 
   <script>
-    // SETUP REQUIRED: Replace this with your own UPI ID before publishing.
-    // Example format: yourname@bank
+    // SSB Story Lab live configuration
     const UPI_ID = "kkaustubhrrana@oksbi";
     const PAYEE_NAME = "Capt Kaustubh Rana";
+    const REGISTRATION_ENDPOINT = "https://script.google.com/macros/s/AKfycbz9N71paj7SUXbmRjBVzhK9icvctdS0fBFBewccpaW5YV0ajEMi-5yVYqkbT_8jWdte/exec";
 
     const prices = {
       ppdt: { written:199, simulation:499, consultation:999 },
@@ -259,39 +258,83 @@
         document.getElementById("enrol").scrollIntoView({behavior:"smooth"});
       });
     });
-    document.getElementById("payBtn").addEventListener("click", () => {
+    const payButton = document.getElementById("payBtn");
+
+    payButton.addEventListener("click", async () => {
       const name = document.getElementById("candidate").value.trim();
       const phone = document.getElementById("whatsapp").value.trim();
       const email = document.getElementById("email").value.trim();
       const attempt = document.getElementById("attempt").value;
+
       if(!name || !phone){ notify("Please enter your name and WhatsApp number first."); return; }
       if(!/^[0-9+\-\s]{10,15}$/.test(phone)){ notify("Please enter a valid contact number."); return; }
       if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ notify("Please enter a valid email address."); return; }
-      if(UPI_ID === "YOUR_UPI_ID_HERE" || !UPI_ID.includes("@")){
-        notify("The payment setup is not active yet. Please contact the programme administrator.");
-        return;
-      }
-      const reference = "SSBL" + Date.now().toString().slice(-10);
-      const note = `${programNames[program.value]} - ${serviceNames[service.value]}`;
-      const params = new URLSearchParams({
-        pa:UPI_ID, pn:PAYEE_NAME, am:amount().toFixed(2), cu:"INR",
-        tn:note, tr:reference
+      if(!UPI_ID.includes("@")){ notify("Payment setup is unavailable. Please contact the programme administrator."); return; }
+
+      const registrationId = "SSBL-" + Date.now().toString();
+      const selectedAmount = amount();
+      const registration = new URLSearchParams({
+        registrationId: registrationId,
+        candidateName: name,
+        whatsapp: phone,
+        email: email,
+        preparationStage: attempt,
+        programme: program.value,
+        serviceLevel: service.value,
+        amount: String(selectedAmount),
+        paymentReference: registrationId
       });
-      const upiUrl = "upi://pay?" + params.toString();
-      const details = [
-        "SSB STORY LAB ENROLMENT",
-        "Reference: " + reference,
-        "Name: " + name,
-        "WhatsApp: " + phone,
-        "Email: " + (email || "Not provided"),
-        "Preparation stage: " + attempt,
-        "Programme: " + programNames[program.value],
-        "Service: " + serviceNames[service.value],
-        "Amount: INR " + amount()
-      ].join("\n");
-      try { localStorage.setItem("ssbl_last_enquiry", details); } catch(e) {}
-      window.location.href = upiUrl;
-      notify("UPI app should open. After payment, follow the confirmation instructions shared by the administrator.");
+
+      payButton.disabled = true;
+      payButton.textContent = "Registering…";
+
+      try {
+        // Apps Script ContentService redirects its response. no-cors allows
+        // this simple form-encoded POST, but the browser cannot read the result.
+        await fetch(REGISTRATION_ENDPOINT, {
+          method: "POST",
+          mode: "no-cors",
+          body: registration
+        });
+
+        try {
+          localStorage.setItem("ssbl_last_registration", JSON.stringify({
+            registrationId,
+            candidateName: name,
+            whatsapp: phone,
+            email,
+            programme: programNames[program.value],
+            service: serviceNames[service.value],
+            amount: selectedAmount,
+            createdAt: new Date().toISOString(),
+            paymentStatus: "PENDING"
+          }));
+        } catch(storageError) {}
+
+        // Carry the same registration reference into the UPI intent.
+        const note = `SSB Story Lab ${programNames[program.value]} ${registrationId}`;
+        const params = new URLSearchParams({
+          pa: UPI_ID,
+          pn: PAYEE_NAME,
+          am: selectedAmount.toFixed(2),
+          cu: "INR",
+          tn: note,
+          tr: registrationId
+        });
+
+        // Give the Apps Script request time to complete before handing off
+        // to the UPI app. The opaque response cannot prove the row was saved.
+        payButton.textContent = "Opening payment…";
+        notify(`Registration submitted. Keep this reference: ${registrationId}`);
+        window.setTimeout(() => {
+          window.location.href = "upi://pay?" + params.toString();
+        }, 900);
+
+      } catch(error) {
+        payButton.disabled = false;
+        payButton.textContent = "Continue to UPI payment";
+        notify("We couldn't submit your registration. Please retry; payment has not been opened.");
+      }
     });
     refresh();
   </script>
